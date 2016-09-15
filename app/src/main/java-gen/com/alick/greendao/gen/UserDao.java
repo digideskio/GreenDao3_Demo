@@ -22,11 +22,11 @@ public class UserDao extends AbstractDao<User, Integer> {
     /**
      * Properties of entity User.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, int.class, "id", true, "ID");
         public final static Property Username = new Property(1, String.class, "username", false, "USERNAME");
-    };
+    }
 
 
     public UserDao(DaoConfig config) {
@@ -105,6 +105,11 @@ public class UserDao extends AbstractDao<User, Integer> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(User entity) {
+        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
     }
 
     @Override

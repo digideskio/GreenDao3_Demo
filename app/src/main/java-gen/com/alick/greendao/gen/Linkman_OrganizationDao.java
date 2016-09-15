@@ -15,19 +15,18 @@ import demo.greendao.acewill.com.greendao3_demo.bean.Linkman_Organization;
 /** 
  * DAO for table "LINKMAN__ORGANIZATION".
 */
-public class Linkman_OrganizationDao extends AbstractDao<Linkman_Organization, String> {
+public class Linkman_OrganizationDao extends AbstractDao<Linkman_Organization, Void> {
 
     public static final String TABLENAME = "LINKMAN__ORGANIZATION";
 
     /**
      * Properties of entity Linkman_Organization.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
-        public final static Property Linkman_Organization_id = new Property(0, String.class, "linkman_Organization_id", true, "LINKMAN__ORGANIZATION_ID");
-        public final static Property LinkmanId = new Property(1, String.class, "linkmanId", false, "LINKMAN_ID");
-        public final static Property MultiChatId = new Property(2, String.class, "multiChatId", false, "MULTI_CHAT_ID");
-    };
+        public final static Property LinkmanId = new Property(0, String.class, "linkmanId", false, "LINKMAN_ID");
+        public final static Property OrganizationId = new Property(1, String.class, "organizationId", false, "ORGANIZATION_ID");
+    }
 
 
     public Linkman_OrganizationDao(DaoConfig config) {
@@ -42,9 +41,8 @@ public class Linkman_OrganizationDao extends AbstractDao<Linkman_Organization, S
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"LINKMAN__ORGANIZATION\" (" + //
-                "\"LINKMAN__ORGANIZATION_ID\" TEXT PRIMARY KEY NOT NULL ," + // 0: linkman_Organization_id
-                "\"LINKMAN_ID\" TEXT," + // 1: linkmanId
-                "\"MULTI_CHAT_ID\" TEXT);"); // 2: multiChatId
+                "\"LINKMAN_ID\" TEXT," + // 0: linkmanId
+                "\"ORGANIZATION_ID\" TEXT);"); // 1: organizationId
     }
 
     /** Drops the underlying database table. */
@@ -57,19 +55,14 @@ public class Linkman_OrganizationDao extends AbstractDao<Linkman_Organization, S
     protected final void bindValues(DatabaseStatement stmt, Linkman_Organization entity) {
         stmt.clearBindings();
  
-        String linkman_Organization_id = entity.getLinkman_Organization_id();
-        if (linkman_Organization_id != null) {
-            stmt.bindString(1, linkman_Organization_id);
-        }
- 
         String linkmanId = entity.getLinkmanId();
         if (linkmanId != null) {
-            stmt.bindString(2, linkmanId);
+            stmt.bindString(1, linkmanId);
         }
  
-        String multiChatId = entity.getMultiChatId();
-        if (multiChatId != null) {
-            stmt.bindString(3, multiChatId);
+        String organizationId = entity.getOrganizationId();
+        if (organizationId != null) {
+            stmt.bindString(2, organizationId);
         }
     }
 
@@ -77,56 +70,52 @@ public class Linkman_OrganizationDao extends AbstractDao<Linkman_Organization, S
     protected final void bindValues(SQLiteStatement stmt, Linkman_Organization entity) {
         stmt.clearBindings();
  
-        String linkman_Organization_id = entity.getLinkman_Organization_id();
-        if (linkman_Organization_id != null) {
-            stmt.bindString(1, linkman_Organization_id);
-        }
- 
         String linkmanId = entity.getLinkmanId();
         if (linkmanId != null) {
-            stmt.bindString(2, linkmanId);
+            stmt.bindString(1, linkmanId);
         }
  
-        String multiChatId = entity.getMultiChatId();
-        if (multiChatId != null) {
-            stmt.bindString(3, multiChatId);
+        String organizationId = entity.getOrganizationId();
+        if (organizationId != null) {
+            stmt.bindString(2, organizationId);
         }
     }
 
     @Override
-    public String readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
+    public Void readKey(Cursor cursor, int offset) {
+        return null;
     }    
 
     @Override
     public Linkman_Organization readEntity(Cursor cursor, int offset) {
         Linkman_Organization entity = new Linkman_Organization( //
-            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // linkman_Organization_id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // linkmanId
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // multiChatId
+            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // linkmanId
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1) // organizationId
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, Linkman_Organization entity, int offset) {
-        entity.setLinkman_Organization_id(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
-        entity.setLinkmanId(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setMultiChatId(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setLinkmanId(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
+        entity.setOrganizationId(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
      }
     
     @Override
-    protected final String updateKeyAfterInsert(Linkman_Organization entity, long rowId) {
-        return entity.getLinkman_Organization_id();
+    protected final Void updateKeyAfterInsert(Linkman_Organization entity, long rowId) {
+        // Unsupported or missing PK type
+        return null;
     }
     
     @Override
-    public String getKey(Linkman_Organization entity) {
-        if(entity != null) {
-            return entity.getLinkman_Organization_id();
-        } else {
-            return null;
-        }
+    public Void getKey(Linkman_Organization entity) {
+        return null;
+    }
+
+    @Override
+    public boolean hasKey(Linkman_Organization entity) {
+        // TODO
+        return false;
     }
 
     @Override

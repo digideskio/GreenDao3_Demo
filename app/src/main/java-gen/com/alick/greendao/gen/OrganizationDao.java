@@ -1,5 +1,6 @@
 package com.alick.greendao.gen;
 
+import java.util.List;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 
@@ -8,6 +9,10 @@ import org.greenrobot.greendao.Property;
 import org.greenrobot.greendao.internal.DaoConfig;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
+import org.greenrobot.greendao.query.Query;
+import org.greenrobot.greendao.query.QueryBuilder;
+
+import demo.greendao.acewill.com.greendao3_demo.bean.Linkman_Organization;
 
 import demo.greendao.acewill.com.greendao3_demo.bean.Organization;
 
@@ -22,12 +27,15 @@ public class OrganizationDao extends AbstractDao<Organization, String> {
     /**
      * Properties of entity Organization.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property OrganizationId = new Property(0, String.class, "organizationId", true, "ORGANIZATION_ID");
         public final static Property OrganizationName = new Property(1, String.class, "organizationName", false, "ORGANIZATION_NAME");
-    };
+    }
 
+    private DaoSession daoSession;
+
+    private Query<Organization> linkman_OrganizationsQuery;
 
     public OrganizationDao(DaoConfig config) {
         super(config);
@@ -35,6 +43,7 @@ public class OrganizationDao extends AbstractDao<Organization, String> {
     
     public OrganizationDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -82,6 +91,12 @@ public class OrganizationDao extends AbstractDao<Organization, String> {
     }
 
     @Override
+    protected final void attachEntity(Organization entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
+    }
+
+    @Override
     public String readKey(Cursor cursor, int offset) {
         return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
     }    
@@ -116,8 +131,28 @@ public class OrganizationDao extends AbstractDao<Organization, String> {
     }
 
     @Override
+    public boolean hasKey(Organization entity) {
+        return entity.getOrganizationId() != null;
+    }
+
+    @Override
     protected final boolean isEntityUpdateable() {
         return true;
     }
     
+    /** Internal query to resolve the "organizations" to-many relationship of Linkman. */
+    public List<Organization> _queryLinkman_Organizations(String linkmanId) {
+        synchronized (this) {
+            if (linkman_OrganizationsQuery == null) {
+                QueryBuilder<Organization> queryBuilder = queryBuilder();
+                queryBuilder.join(Linkman_Organization.class, Linkman_OrganizationDao.Properties.OrganizationId)
+                    .where(Linkman_OrganizationDao.Properties.LinkmanId.eq(linkmanId));
+                linkman_OrganizationsQuery = queryBuilder.build();
+            }
+        }
+        Query<Organization> query = linkman_OrganizationsQuery.forCurrentThread();
+        query.setParameter(0, linkmanId);
+        return query.list();
+    }
+
 }

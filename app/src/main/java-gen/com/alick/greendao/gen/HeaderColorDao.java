@@ -22,11 +22,11 @@ public class HeaderColorDao extends AbstractDao<HeaderColor, Integer> {
     /**
      * Properties of entity HeaderColor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property ColorId = new Property(0, int.class, "colorId", true, "COLOR_ID");
         public final static Property ColorValue = new Property(1, String.class, "colorValue", false, "COLOR_VALUE");
-    };
+    }
 
 
     public HeaderColorDao(DaoConfig config) {
@@ -105,6 +105,11 @@ public class HeaderColorDao extends AbstractDao<HeaderColor, Integer> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(HeaderColor entity) {
+        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
     }
 
     @Override

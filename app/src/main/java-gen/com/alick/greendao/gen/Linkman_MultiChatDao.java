@@ -1,6 +1,5 @@
 package com.alick.greendao.gen;
 
-import java.util.List;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 
@@ -9,8 +8,6 @@ import org.greenrobot.greendao.Property;
 import org.greenrobot.greendao.internal.DaoConfig;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
-import org.greenrobot.greendao.query.Query;
-import org.greenrobot.greendao.query.QueryBuilder;
 
 import demo.greendao.acewill.com.greendao3_demo.bean.Linkman_MultiChat;
 
@@ -25,13 +22,12 @@ public class Linkman_MultiChatDao extends AbstractDao<Linkman_MultiChat, Void> {
     /**
      * Properties of entity Linkman_MultiChat.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property LinkmanId = new Property(0, String.class, "linkmanId", false, "LINKMAN_ID");
         public final static Property MultiChatId = new Property(1, String.class, "multiChatId", false, "MULTI_CHAT_ID");
-    };
+    }
 
-    private Query<Linkman_MultiChat> linkman_Linkman_multiChatsQuery;
 
     public Linkman_MultiChatDao(DaoConfig config) {
         super(config);
@@ -117,22 +113,14 @@ public class Linkman_MultiChatDao extends AbstractDao<Linkman_MultiChat, Void> {
     }
 
     @Override
+    public boolean hasKey(Linkman_MultiChat entity) {
+        // TODO
+        return false;
+    }
+
+    @Override
     protected final boolean isEntityUpdateable() {
         return true;
     }
     
-    /** Internal query to resolve the "linkman_multiChats" to-many relationship of Linkman. */
-    public List<Linkman_MultiChat> _queryLinkman_Linkman_multiChats(String linkmanId) {
-        synchronized (this) {
-            if (linkman_Linkman_multiChatsQuery == null) {
-                QueryBuilder<Linkman_MultiChat> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.LinkmanId.eq(null));
-                linkman_Linkman_multiChatsQuery = queryBuilder.build();
-            }
-        }
-        Query<Linkman_MultiChat> query = linkman_Linkman_multiChatsQuery.forCurrentThread();
-        query.setParameter(0, linkmanId);
-        return query.list();
-    }
-
 }

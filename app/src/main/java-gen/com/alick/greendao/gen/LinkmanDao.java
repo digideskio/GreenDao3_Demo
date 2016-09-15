@@ -15,6 +15,7 @@ import org.greenrobot.greendao.query.Query;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import demo.greendao.acewill.com.greendao3_demo.bean.HeaderColor;
+import demo.greendao.acewill.com.greendao3_demo.bean.Linkman_Organization;
 
 import demo.greendao.acewill.com.greendao3_demo.bean.Linkman;
 
@@ -29,18 +30,19 @@ public class LinkmanDao extends AbstractDao<Linkman, String> {
     /**
      * Properties of entity Linkman.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property LinkmanId = new Property(0, String.class, "linkmanId", true, "LINKMAN_ID");
         public final static Property LinkmanName = new Property(1, String.class, "linkmanName", false, "LINKMAN_NAME");
         public final static Property Linkman_head_color = new Property(2, int.class, "linkman_head_color", false, "LINKMAN_HEAD_COLOR");
         public final static Property IsManager = new Property(3, boolean.class, "isManager", false, "IS_MANAGER");
         public final static Property ColorId = new Property(4, int.class, "colorId", false, "COLOR_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
     private Query<Linkman> multiChat_LinkmensQuery;
+    private Query<Linkman> organization_LinkmansQuery;
 
     public LinkmanDao(DaoConfig config) {
         super(config);
@@ -151,6 +153,11 @@ public class LinkmanDao extends AbstractDao<Linkman, String> {
     }
 
     @Override
+    public boolean hasKey(Linkman entity) {
+        return entity.getLinkmanId() != null;
+    }
+
+    @Override
     protected final boolean isEntityUpdateable() {
         return true;
     }
@@ -166,6 +173,21 @@ public class LinkmanDao extends AbstractDao<Linkman, String> {
         }
         Query<Linkman> query = multiChat_LinkmensQuery.forCurrentThread();
         query.setParameter(0, linkmanId);
+        return query.list();
+    }
+
+    /** Internal query to resolve the "linkmans" to-many relationship of Organization. */
+    public List<Linkman> _queryOrganization_Linkmans(String organizationId) {
+        synchronized (this) {
+            if (organization_LinkmansQuery == null) {
+                QueryBuilder<Linkman> queryBuilder = queryBuilder();
+                queryBuilder.join(Linkman_Organization.class, Linkman_OrganizationDao.Properties.LinkmanId)
+                    .where(Linkman_OrganizationDao.Properties.OrganizationId.eq(organizationId));
+                organization_LinkmansQuery = queryBuilder.build();
+            }
+        }
+        Query<Linkman> query = organization_LinkmansQuery.forCurrentThread();
+        query.setParameter(0, organizationId);
         return query.list();
     }
 

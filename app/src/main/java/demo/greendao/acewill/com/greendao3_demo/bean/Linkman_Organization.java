@@ -9,16 +9,16 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Entity
 public class Linkman_Organization {
-    @Id
-    private String linkman_Organization_id;
 
     private String linkmanId;
-    private String multiChatId;
-    public String getMultiChatId() {
-        return this.multiChatId;
+    private String organizationId;
+    @Generated(hash = 540606161)
+    public Linkman_Organization(String linkmanId, String organizationId) {
+        this.linkmanId = linkmanId;
+        this.organizationId = organizationId;
     }
-    public void setMultiChatId(String multiChatId) {
-        this.multiChatId = multiChatId;
+    @Generated(hash = 915035201)
+    public Linkman_Organization() {
     }
     public String getLinkmanId() {
         return this.linkmanId;
@@ -26,20 +26,11 @@ public class Linkman_Organization {
     public void setLinkmanId(String linkmanId) {
         this.linkmanId = linkmanId;
     }
-    public String getLinkman_Organization_id() {
-        return this.linkman_Organization_id;
+    public String getOrganizationId() {
+        return this.organizationId;
     }
-    public void setLinkman_Organization_id(String linkman_Organization_id) {
-        this.linkman_Organization_id = linkman_Organization_id;
+    public void setOrganizationId(String organizationId) {
+        this.organizationId = organizationId;
     }
-    @Generated(hash = 1217479152)
-    public Linkman_Organization(String linkman_Organization_id, String linkmanId,
-            String multiChatId) {
-        this.linkman_Organization_id = linkman_Organization_id;
-        this.linkmanId = linkmanId;
-        this.multiChatId = multiChatId;
-    }
-    @Generated(hash = 915035201)
-    public Linkman_Organization() {
-    }
+
 }

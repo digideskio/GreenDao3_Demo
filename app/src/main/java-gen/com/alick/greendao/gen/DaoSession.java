@@ -92,13 +92,13 @@ public class DaoSession extends AbstractDaoSession {
     }
     
     public void clear() {
-        headerColorDaoConfig.getIdentityScope().clear();
-        linkmanDaoConfig.getIdentityScope().clear();
-        linkman_MultiChatDaoConfig.getIdentityScope().clear();
-        linkman_OrganizationDaoConfig.getIdentityScope().clear();
-        multiChatDaoConfig.getIdentityScope().clear();
-        organizationDaoConfig.getIdentityScope().clear();
-        userDaoConfig.getIdentityScope().clear();
+        headerColorDaoConfig.clearIdentityScope();
+        linkmanDaoConfig.clearIdentityScope();
+        linkman_MultiChatDaoConfig.clearIdentityScope();
+        linkman_OrganizationDaoConfig.clearIdentityScope();
+        multiChatDaoConfig.clearIdentityScope();
+        organizationDaoConfig.clearIdentityScope();
+        userDaoConfig.clearIdentityScope();
     }
 
     public HeaderColorDao getHeaderColorDao() {
