@@ -2,10 +2,13 @@ package demo.greendao.acewill.com.greendao3_demo.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Keep;
 import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.annotation.ToOne;
+import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Unique;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
@@ -13,7 +16,10 @@ import com.alick.greendao.gen.DaoSession;
 import com.alick.greendao.gen.LinkmanDao;
 import com.alick.greendao.gen.HeaderColorDao;
 import org.greenrobot.greendao.annotation.NotNull;
+import org.greenrobot.greendao.query.QueryBuilder;
+
 import com.alick.greendao.gen.Linkman_MultiChatDao;
+import com.alick.greendao.gen.MultiChatDao;
 
 /**
  * Created by cxw on 2016/9/14.
@@ -34,6 +40,10 @@ public class Linkman {
 
     @ToMany(referencedJoinProperty = "linkmanId")
     private List<Linkman_MultiChat> linkman_multiChats;
+
+    @Transient
+    private List<MultiChat> multiChats;
+
 
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
@@ -75,28 +85,6 @@ public class Linkman {
     @Generated(hash = 563329546)
     public synchronized void resetLinkman_multiChats() {
         linkman_multiChats = null;
-    }
-
-    /**
-     * To-many relationship, resolved on first access (and after reset).
-     * Changes to to-many relations are not persisted, make changes to the target entity.
-     */
-    @Generated(hash = 1082516731)
-    public List<Linkman_MultiChat> getLinkman_multChats() {
-        if (linkman_multiChats == null) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            Linkman_MultiChatDao targetDao = daoSession.getLinkman_MultiChatDao();
-            List<Linkman_MultiChat> linkman_multiChatsNew = targetDao._queryLinkman_Linkman_multiChats(linkmanId);
-            synchronized (this) {
-                if(linkman_multiChats == null) {
-                    linkman_multiChats = linkman_multiChatsNew;
-                }
-            }
-        }
-        return linkman_multiChats;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -190,6 +178,28 @@ public class Linkman {
         this.linkmanId = linkmanId;
     }
 
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 1082516731)
+    public List<Linkman_MultiChat> getLinkman_multiChats() {
+        if (linkman_multiChats == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            Linkman_MultiChatDao targetDao = daoSession.getLinkman_MultiChatDao();
+            List<Linkman_MultiChat> linkman_multiChatsNew = targetDao._queryLinkman_Linkman_multiChats(linkmanId);
+            synchronized (this) {
+                if(linkman_multiChats == null) {
+                    linkman_multiChats = linkman_multiChatsNew;
+                }
+            }
+        }
+        return linkman_multiChats;
+    }
+
     @Generated(hash = 1597881201)
     public Linkman(String linkmanId, String linkmanName, int linkman_head_color,
             boolean isManager, int colorId) {
@@ -204,6 +214,33 @@ public class Linkman {
     public Linkman() {
     }
 
-
-
+    @Keep
+    public List<MultiChat> getMultiChats() {
+        if (multiChats == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            QueryBuilder<MultiChat> multiChatQueryBuilder = daoSession.getMultiChatDao().queryBuilder();
+            /*查询中间表数据集合*/
+            List<Linkman_MultiChat> linkman_multiChats = getLinkman_multiChats();
+            /*查询出中间表中的群id集合*/
+            List<String> multiChatIds=new ArrayList<>();
+            for (Linkman_MultiChat linkman_multiChat:linkman_multiChats) {
+                multiChatIds.add(linkman_multiChat.getMultiChatId());
+            }
+            /*通过[where in]语句查询群集合*/
+            List<MultiChat> linkman_multiChatsNew = multiChatQueryBuilder.where(MultiChatDao.Properties.MultiChatId.in(multiChatIds)).list();
+            synchronized (this) {
+                if(multiChats == null) {
+                    multiChats = linkman_multiChatsNew;
+                }
+            }
+        }
+        return multiChats;
+    }
+    @Keep
+    public void setMultiChats(List<MultiChat> multiChats) {
+        this.multiChats = multiChats;
+    }
 }

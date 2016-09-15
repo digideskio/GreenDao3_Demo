@@ -21,8 +21,6 @@ public class Linkman_MultiChat {
     @Generated(hash = 902393231)
     public Linkman_MultiChat() {
     }
-
-
     public String getMultiChatId() {
         return this.multiChatId;
     }
