@@ -15,6 +15,7 @@ import org.greenrobot.greendao.query.Query;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import demo.greendao.acewill.com.greendao3_demo.bean.HeaderColor;
+import demo.greendao.acewill.com.greendao3_demo.bean.Linkman_MultiChat;
 import demo.greendao.acewill.com.greendao3_demo.bean.Linkman_Organization;
 
 import demo.greendao.acewill.com.greendao3_demo.bean.Linkman;
@@ -41,7 +42,7 @@ public class LinkmanDao extends AbstractDao<Linkman, String> {
 
     private DaoSession daoSession;
 
-    private Query<Linkman> multiChat_LinkmensQuery;
+    private Query<Linkman> multiChat_LinkmansQuery;
     private Query<Linkman> organization_LinkmansQuery;
 
     public LinkmanDao(DaoConfig config) {
@@ -162,17 +163,18 @@ public class LinkmanDao extends AbstractDao<Linkman, String> {
         return true;
     }
     
-    /** Internal query to resolve the "linkmens" to-many relationship of MultiChat. */
-    public List<Linkman> _queryMultiChat_Linkmens(String linkmanId) {
+    /** Internal query to resolve the "linkmans" to-many relationship of MultiChat. */
+    public List<Linkman> _queryMultiChat_Linkmans(String multiChatId) {
         synchronized (this) {
-            if (multiChat_LinkmensQuery == null) {
+            if (multiChat_LinkmansQuery == null) {
                 QueryBuilder<Linkman> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.LinkmanId.eq(null));
-                multiChat_LinkmensQuery = queryBuilder.build();
+                queryBuilder.join(Linkman_MultiChat.class, Linkman_MultiChatDao.Properties.LinkmanId)
+                    .where(Linkman_MultiChatDao.Properties.MultiChatId.eq(multiChatId));
+                multiChat_LinkmansQuery = queryBuilder.build();
             }
         }
-        Query<Linkman> query = multiChat_LinkmensQuery.forCurrentThread();
-        query.setParameter(0, linkmanId);
+        Query<Linkman> query = multiChat_LinkmansQuery.forCurrentThread();
+        query.setParameter(0, multiChatId);
         return query.list();
     }
 
